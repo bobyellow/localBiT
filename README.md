@@ -1,2 +1,8 @@
-# localBiT
-A Reciprocal Statistic for Detecting the Full Range of Local Patterns of Bivariate Spatial Association 
+### local BiT statistic
+A Reciprocal Statistic for Detecting the Full Range of Local Patterns of Bivariate Spatial Association
+
+### Abstract
+Bivariate spatial association is the relationship between two variables in spatial proximity.  Observation of strong bivariate spatial association rests on the similarity of two variables in the same geographic neighborhood, and it should not be conditioned by the concentration of extreme values. However, existing spatial statistical methods put disproportionate emphasis on patterns formed by extreme values, such as the so-called “high-high”, “low-low”, “high-low”, and “low-high” patterns. The consequence is that patterns of strong bivariate spatial association formed by non-extreme values are often ignored, as if they were “less interesting” or did not exist. In this study, we solve this issue by proposing a new exploratory local spatial statistic for detecting the full range of bivariate spatial association, dubbed local BiT. In comparison with the widely adopted bivariate local Moran’s I and local Lee’s L, local BiT can detect patterns of bivariate spatial association regardless of whether the variable values are high, low, or anywhere in-between. In addition, its reciprocal design guarantees that the order of two variables in calculations does not lead to different results. Moreover, it avoids false positive errors arising when one variable has extreme value while the other is non-extreme. Properties of the new statistic are studied on synthetic datasets. A case study is conducted in Mecklenburg County, North Carolina, to examine the spatial association between adults’ educational attainment and elementary school students’ academic performance. This study of spatial demographics and human capital demonstrates the differences and value of the BiT over other methods.
+
+### Reference:
+Ran Tao, Jean-Claude Thill. Mind the “Forgotten Middle”: the Bivariate Local Geary’s C. Annals of the American Association of Geographers. (Accepted)

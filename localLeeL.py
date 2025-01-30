@@ -1,13 +1,16 @@
+""" local Lee's L (Lee 2001)
+Lee, S. I. (2001). Developing a bivariate spatial association measure: an integration of Pearson's r and Moran's I. Journal of Geographical Systems, 3(4), 369-385."""
+
 import core.shapefile
 import numpy as np
 import pandas as pd
 from scipy import stats
 from core.getNeighbors import getNeighborsAreaContiguity,extractCentroidsFromShapefile, kNearestNeighbors
-from core.spatstats import calculateBivariateT
+from core.spatstats import calculateLocalL
 
 # Load shapefile data
 sf = core.shapefile.Reader("input/Hex437.shp") # Synthetic data
-#sf =core.shapefile.Reader("input/NPA_2014_Mecklenburg.shp") # Case study with Mecklenburg County 
+#sf = core.shapefile.Reader("input/NPA_2014_Mecklenburg.shp") # Case study with Mecklenburg County 
 shapes = sf.shapes()
 
 # Prepare AREAS input for Queen's and Rook's contiguity
@@ -54,14 +57,14 @@ var2_std = [(val - np.mean(var2)) / np.std(var2) for val in var2]
 dataDictionary_std = {int(b): [var1_std[a], var2_std[a]] for a, b in enumerate(id)}
 
 
-# Compute BiT for each spatial unit
-BTValues = {}
+# Compute (bivariate) L for each spatial unit
+BLValues = {}
 result = []
 for x in areaKeys:
     keyList = neighbors[x]
-    currentT = calculateBivariateT(x, keyList, dataDictionary_std)
-    result.append(currentT)
-    BTValues[x] = currentT
+    currentBL = calculateLocalL(x, keyList, dataDictionary_std)
+    result.append(currentBL)
+    BLValues[x] = currentBL
 
 # Monte Carlo permutation for significance test
 plist = []
@@ -75,38 +78,36 @@ for x in areaKeys:
     Nlist.remove(x)
     for _ in range(999):  # Perform 999 random permutations
         permKey = np.random.choice(Nlist, number, replace=False)
-        randomT = calculateBivariateT(x, permKey, dataDictionary_std)
-        if BTValues[x] > randomT:
+        randomBL = calculateLocalL(x, permKey, dataDictionary_std)
+        if BLValues[x] > randomBL:
             betterClusters += 1
-    p = (betterClusters + 1) / 1000.0 # The most important result. The highest/lowest ones correspond to negative/positive clusters of bivariate spatial association
+    p = (betterClusters + 1) / 1000.0 # The most important result. The highest/lowest ones correspond to positive/negative clusters of bivariate spatial association
     plist.append(p)
-    pvalue.append(p if p < 0.5 else 1 - p) # Adjust negative cluster's p-value to small values
+    pvalue.append(p if p < 0.5 else 1 - p) # Adjust positive cluster's p-value to small values
 
 # Identify patterns at different significance levels
-idx0001 = []
-idx001 = []
-idx005 = []
+idx = []
+dataMean = np.mean(np.double(var1))
+dataMean2 = np.mean(np.double(var2))
+
 for x in areaKeys:
-    if plist[x] <= 0.001:
-        idx0001.append('pos_cluster')
-    elif plist[x] >= 0.999:
-        idx0001.append('neg_cluster')
+    if plist[x] >= 0.95: # Modify to 0.99 (0.999) for p-value < 0.01 (0.001) level
+        if dataDictionary[x][0] < dataMean and dataDictionary[x][1] < dataMean2:
+            idx.append('LL')
+        elif dataDictionary[x][0] > dataMean and dataDictionary[x][1] > dataMean2:
+            idx.append('HH')
+        else:
+            idx.append('OtherBgL')
+    elif plist[x] <= 0.05:
+        if dataDictionary[x][0] < dataMean and dataDictionary[x][1] > dataMean2:
+            idx.append('LH')
+        elif dataDictionary[x][0] > dataMean and dataDictionary[x][1] < dataMean2:
+            idx.append('HL')
+        else:
+            idx.append('OtherSmL')
     else:
-        idx0001.append('NS')
+        idx.append('NS')
 
-    if plist[x] <= 0.01:
-        idx001.append('pos_cluster')
-    elif plist[x] >= 0.99:
-        idx001.append('neg_cluster')
-    else:
-        idx001.append('NS')
-
-    if plist[x] <= 0.05:
-        idx005.append('pos_cluster')
-    elif plist[x] >= 0.95:
-        idx005.append('neg_cluster')
-    else:
-        idx005.append('NS')
 
 # Save results to a DataFrame and export to CSV
 df = pd.DataFrame({
@@ -115,15 +116,13 @@ df = pd.DataFrame({
     'Edge': Edge,
     'var1': var1,  # Original Variable 1 values
     'var2': var2,  # Original Variable 2 values
-    'BiT': result,  # Computed BiT statistic
+    'L': result,  # Computed Lee's L statistic
     'p_sim': plist,  # Pseudo p-values
     'p_value': pvalue,  # Adjusted p-values
-    'pattern005': idx005,  # Patterns at 0.05 significance level
-    'pattern001': idx001,  # Patterns at 0.01 significance level
-    'pattern0001': idx0001  # Patterns at 0.001 significance level
+    'pattern': idx,  # Patterns that passed the significant test
 })
 
-df.to_csv("result/BiT_Hex437_XY_Quali.csv", index=False)
+df.to_csv("result/LeeL_Hex437_XY_Quali.csv", index=False)
 #df.to_csv("result/BiT_Hex437_Z2Z_Quali_10_50_90.csv", index=False)
 #df.to_csv("result/BiT_Meck_Bac_ELem.csv", index=False)
 print("Processing Complete.")

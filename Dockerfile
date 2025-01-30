@@ -19,4 +19,4 @@ WORKDIR /app
 COPY . .
 
 # Run your script when the container starts
-CMD ["python", "BiT_updated.py"]
+CMD ["python", "localBiT.py"]

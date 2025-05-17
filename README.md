@@ -1,6 +1,6 @@
 ### local BiT: A Reciprocal Statistic for Detecting the Full Range of Local Patterns of Bivariate Spatial Association
 
-Try the codes of local BiT and the other bivariate/multivariate spatial stats as follows:
+Try the codes of local BiT and other bivariate/multivariate spatial stats as follows:
 
 | `localBiT.py`        | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bobyellow/localBiT/blob/main/localBiT.ipynb)        |
 | `localBiMoranI.py`   | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bobyellow/localBiT/blob/main/localBiMoranI.ipynb)   |
@@ -8,8 +8,7 @@ Try the codes of local BiT and the other bivariate/multivariate spatial stats as
 | `localMultiGearyC.py`| [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bobyellow/localBiT/blob/main/localMultiGearyC.ipynb)|
 
 
-
-Bivariate spatial association (BSA) refers to the degree of similarity between two independently measured values observed in spatial proximity. 
+**Bivariate spatial association (BSA)** refers to the degree of similarity between two independently measured values observed in spatial proximity. 
 The concept of BSA is an extension of univariate spatial association (also referred to as spatial autocorrelation), which is encapsulated by Tobler’s first law of geography: “everything is related to everything else, but near things are more related than distant things” (Tobler 1970).
 Likewise, BSA also centers on these two types of similarities. It refers to the similarity between the association trends of two variables in the same geographic neighborhood globally, that is, over the full spatial extent of the study. 
 
@@ -19,7 +18,7 @@ The figure below depicts two variables in the same space (they are represented i
 In the following simple example, Zones 1, 5, and 9 are expected to have strong positive BSA due to high similarity between the values taken by two variables in spatial proximity; Zones 3 and 7 are expected to have strong negative BSA due to the opposite local trends of the two variables in the vicinity of these zones; Zones 2, 4, 6, and 8 are not expected to exhibit significant patterns because one variable takes extreme values while the other is medium; they are neither highly similar nor highly dissimilar in spatial proximity.
 ![Fig2](https://github.com/user-attachments/assets/860eb031-201c-43e0-86f9-6aeeddbb6f31)
 
-The results show that all three bivariate statistics (local BiT, local bivariate Moran's I, and local Lee's L) are effective at detecting strong BSA patterns formed by extreme values. **But only local BiT can detect strong positive BSA patterns formed by non-extreme values (MM) in Zone 5**, whereas the other two statistics cannot. Also, the multivariate local Geary’s C (Anselin 2019) is proven to have distinct purpose and functionality from the other statistics, as it measures the joint spatial association of all variables while overlooking their mutual relationships that the BSA hinges upon!
+The results show that all three bivariate statistics (local BiT, local bivariate Moran's I, and local Lee's L) are effective at detecting strong BSA patterns formed by extreme values. **But only local BiT can detect strong positive BSA patterns formed by non-extreme values (MM) in Zone 5**, whereas the other two statistics cannot. Also, the multivariate local Geary’s C (Anselin 2019) is proven to have a distinct purpose and functionality from the other statistics, as it measures the joint spatial association of all variables while overlooking their mutual relationships that the BSA hinges upon!
 ![Fig3](https://github.com/user-attachments/assets/0a6c3007-f7d5-4d96-891a-b725ae85e8a9)
 
 

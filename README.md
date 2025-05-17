@@ -1,4 +1,13 @@
 ### local BiT: A Reciprocal Statistic for Detecting the Full Range of Local Patterns of Bivariate Spatial Association
+
+
+| `localBiMoranI.py`   | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bobyellow/localBiT/blob/main/localBiMoranI.ipynb)   |
+| `localBiT.py`        | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bobyellow/localBiT/blob/main/localBiT.ipynb)        |
+| `localLeeL.py`       | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bobyellow/localBiT/blob/main/localLeeL.ipynb)       |
+| `localMultiGearyC.py`| [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bobyellow/localBiT/blob/main/localMultiGearyC.ipynb)|
+
+
+
 Bivariate spatial association (BSA) refers to the degree of similarity between two independently measured values observed in spatial proximity. 
 The concept of BSA is an extension of univariate spatial association (also referred to as spatial autocorrelation), which is encapsulated by Tobler’s first law of geography: “everything is related to everything else, but near things are more related than distant things” (Tobler 1970).
 Likewise, BSA also centers on these two types of similarities. It refers to the similarity between the association trends of two variables in the same geographic neighborhood globally, that is, over the full spatial extent of the study. 

@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 from core.getNeighbors import getNeighborsAreaContiguity,extractCentroidsFromShapefile, kNearestNeighbors
-from core.spatstats import calculateBivaraiteMoranI
+from core.spatstats import calculateBivariteMoranI
 
 # Load shapefile data
 sf = core.shapefile.Reader("input/Hex437.shp") # Synthetic data
@@ -63,7 +63,7 @@ BIValues = {}
 result = []
 for x in areaKeys:
     keyList = neighbors[x]
-    currentBI = calculateBivaraiteMoranI(x, keyList, dataDictionary_std)
+    currentBI = calculateBivariteMoranI(x, keyList, dataDictionary_std)
     result.append(currentBI)
     BIValues[x] = currentBI
 
@@ -79,7 +79,7 @@ for x in areaKeys:
     Nlist.remove(x)
     for _ in range(999):  # Perform 999 random permutations
         permKey = np.random.choice(Nlist, number, replace=False)
-        randomBI = calculateBivaraiteMoranI(x, permKey, dataDictionary_std)
+        randomBI = calculateBivariteMoranI(x, permKey, dataDictionary_std)
         if BIValues[x] > randomBI:
             betterClusters += 1
     p = (betterClusters + 1) / 1000.0 # The most important result. The highest/lowest ones correspond to positive/negative clusters of bivariate spatial association
@@ -120,7 +120,7 @@ df = pd.DataFrame({
     'BI': result,  # Computed BiMoranI statistic
     'p_sim': plist,  # Pseudo p-values
     'p_value': pvalue,  # Adjusted p-values
-    'pattern': idx,  # Patterns that passed the significant test
+    'pattern': idx,  # Patterns that passed the significance test
 })
 
 df.to_csv("result/BiMoranI_Hex437_XY_Quali.csv", index=False)

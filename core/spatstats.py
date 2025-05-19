@@ -20,7 +20,7 @@ def calculateBivariateT(ikey, keyList, dataDictionary):
 
 
 # Define the bivariate local Moran's I statistic
-def calculateBivaraiteMoranI(ikey, keyList, dataDictionary):
+def calculateBivariteMoranI(ikey, keyList, dataDictionary):
     """
     This function returns the local bivaraite Moran's I statistic a given region.
     keyList is the list of the keys of i's neighbors

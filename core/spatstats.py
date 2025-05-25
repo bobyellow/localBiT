@@ -4,6 +4,7 @@ import numpy as np
 def calculateBivariateT(ikey, keyList, dataDictionary):
     """
     Calculate the local bivariate BiT statistic for a given unit and its neighbors.
+    This implementation assumes that both variable x and y have been standardized, so their mean equals 0, std equals 1.
     ikey: ID of the focal unit
     keyList: List of neighboring unit IDs
     dataDictionary: Standardized variable dictionary
@@ -20,9 +21,10 @@ def calculateBivariateT(ikey, keyList, dataDictionary):
 
 
 # Define the bivariate local Moran's I statistic
-def calculateBivariteMoranI(ikey, keyList, dataDictionary):
+def calculateBivaraiteMoranI(ikey, keyList, dataDictionary):
     """
     This function returns the local bivaraite Moran's I statistic a given region.
+    This implementation assumes that both variable x and y have been standardized, so their mean equals 0, std equals 1.
     keyList is the list of the keys of i's neighbors
     dataLength is the total number of input data units
     dataDictionary has multivariates {key:[v1,v2,...,vk]}
@@ -30,12 +32,11 @@ def calculateBivariteMoranI(ikey, keyList, dataDictionary):
     """
     sum = 0
     dataDictionary1 = { key:value for key, value in dataDictionary.items()}
-
     neighborNumber = len(keyList)
     for j in keyList:
        if j in dataDictionary1.keys():
             #standardize variable j
-            sum = sum + dataDictionary1[j][1] 
+            sum += dataDictionary1[j][1] 
             #for non-binary wij, work as:
             #sum = sum + std_j_value * wij
 
@@ -107,3 +108,60 @@ def calculateMultiGearyC(ikey, keyList, dataDictionary, dataDictionaryPer, numVa
 
     MC = total_sum / numVar
     return MC
+
+
+# Define the local G statistic
+def calculateGetisG(keyList, dataMean, dataStd, dataDictionary, dataLength):
+    """
+    This function returns the local G statistic a given region.
+    keyList is the list of keys of neighbors
+    dataLength is the total number of input data units
+    """
+    sum = 0
+    dataDictionary1 = { key:value for key, value in dataDictionary.items()}
+    neighborNumber = len(keyList)
+    for i in keyList:
+        sum += np.double(dataDictionary1[i])
+    numerator = sum - (dataMean * neighborNumber)
+    denominator = dataStd * ((float(dataLength * neighborNumber - (neighborNumber ** 2)) / (dataLength - 1)) ** 0.5)
+
+    G = (np.double(numerator))/(np.double(denominator))
+    return G
+
+
+
+# Define the (univariate) local Moran's I statistic
+def calculateMoranI(ikey, keyList, dataMean, dataStd, dataDictionary, dataLength):
+    """
+    This function returns the local Moran's I statistic a given region.
+    keyList is the list of the keys of i's neighbors
+    dataLength is the total number of input data units
+    """
+    sum = 0
+    dataDictionary1 = { key:value for key, value in dataDictionary.items()}
+    neighborNumber = len(keyList)
+    for j in keyList:
+        sum += np.double((dataDictionary1[j])- dataMean)
+    numerator = dataLength*(dataDictionary1[ikey] - dataMean)*sum
+    denominator = dataStd ** 2
+    #To row standardize: sum of wij for each i equals 1
+    denominator = denominator * neighborNumber
+    
+    I = (np.double(numerator))/(np.double(denominator))
+    return I
+
+
+# Define the (univariate) local Geary's C statistic
+def calculateGearyC(ikey, keyList, dataDictionary):
+    """
+    This function returns the local Geary's c statistic a given region.
+    keyList is the list of the keys of i's neighbors
+    dataLength is the total number of input data units
+    """
+    sum = 0
+    dataDictionary1 = { key:value for key, value in dataDictionary.items()}
+    neighborNumber = len(keyList)
+    for j in keyList:
+         sum += np.double((dataDictionary1[ikey]- dataDictionary1[j])**2)
+    C = sum
+    return C
